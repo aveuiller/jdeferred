@@ -113,6 +113,29 @@ android.libraryVariants.all { variant ->
 apply from: rootProject.file('gradle/pom.gradle')
 apply from: rootProject.file('gradle/code-quality.gradle')
 
+afterEvaluate {
+    artifacts {
+        archives packageDebugJavadocJar, packageDebugSourcesJar
+    }
+}
+uploadArchives {
+    repositories.mavenDeployer {
+        pom.project {
+            name 'jdeferred-android'
+            packaging 'aar'
+            description project.project_description
+            url project.project_url
+            scm scmEntry
+
+            licenses {
+                license commonLicense
+            }
+            developers {
+                devs.collect({ developer it })
+            }
+        }
+    }
+}
 publishing {
     publications {
         mavenJava(MavenPublication) {

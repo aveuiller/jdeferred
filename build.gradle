@@ -17,6 +17,8 @@
 import java.text.SimpleDateFormat
 
 buildscript {
+    apply from: "nexusConfig.gradle"
+
     repositories {
         jcenter()
     }
@@ -52,6 +54,27 @@ ext {
     buildCreatedBy = "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})".toString()
     projectsWithCoverage = []
 }
+ext.commonLicense = {
+    name 'Apache License, Version 2.0'
+    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+}
+
+ext.devs = [
+        {
+            id 'saturnism'
+            name 'Ray Tsang'
+        },
+        {
+            id 'aalmiray'
+            name 'Andres Almiray'
+        }
+]
+
+ext.scmEntry = {
+    connection 'scm:git:' + project_scm
+    developerConnection 'scm:git:'+project_url
+    url project_url
+}
 
 if (!project.hasProperty('bintrayUsername')) ext.bintrayUsername = ''
 if (!project.hasProperty('bintrayApiKey')) ext.bintrayApiKey = ''
@@ -77,13 +100,13 @@ coveralls {
 }
 
 task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
-    dependsOn            = projectsWithCoverage.test
-    group                = 'Reporting'
-    description          = 'Aggregate Jacoco coverage reports.'
+    dependsOn = projectsWithCoverage.test
+    group = 'Reporting'
+    description = 'Aggregate Jacoco coverage reports.'
     additionalSourceDirs = files(projectsWithCoverage.sourceSets.main.allSource.srcDirs)
-    sourceDirectories    = files(projectsWithCoverage .sourceSets.main.allSource.srcDirs)
-    classDirectories     = files(projectsWithCoverage.sourceSets.main.output)
-    executionData        = files(projectsWithCoverage.jacocoTestReport.executionData)
+    sourceDirectories = files(projectsWithCoverage.sourceSets.main.allSource.srcDirs)
+    classDirectories = files(projectsWithCoverage.sourceSets.main.output)
+    executionData = files(projectsWithCoverage.jacocoTestReport.executionData)
     reports {
         html.enabled = true
         xml.enabled = true

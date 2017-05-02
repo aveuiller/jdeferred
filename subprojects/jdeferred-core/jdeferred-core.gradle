@@ -71,6 +71,27 @@ jar {
         }
     }
 }
+artifacts {
+    archives javadocJar, sourcesJar
+}
+uploadArchives {
+    repositories.mavenDeployer {
+        pom.project {
+            name 'jdeferred-core'
+            packaging 'jar'
+            description project.project_description
+            url project.project_url
+            scm scmEntry
+
+            licenses {
+                license commonLicense
+            }
+            developers {
+                devs.collect({ developer it })
+            }
+        }
+    }
+}
 
 publishing {
     publications {
